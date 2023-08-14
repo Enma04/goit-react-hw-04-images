@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchPixabay } from '../resources/fetchPixabay';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Searchbar from './Searchbar/Searchbar';
@@ -7,23 +7,32 @@ import Button from './Button/Button';
 import { Grid } from 'react-loader-spinner';
 import Modal from './Modal/Modal';
 
-export class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      images: [],
-      search: '',
-      page: 1,
-      found: false,
-    };
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleModal = this.handleModal.bind(this);
-  }
+export const App = () => {
+  const [images, setImages] = useState([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [found, setFound] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [largeURL, setLargeURL] = useState('');
+
+  useEffect( () => {
+    async function FetchApi() {
+      const newData = await fetchPixabay(search, 1).then();
+      setImages([...newData.hits]);
+      setPage(1);
+      setFound(false);
+      setModal(false);
+      setLargeURL('');
+      console.log("New data: ", newData.hits);
+    }
+
+    if(search !== "") FetchApi();
+    
+  }, [search]);
 
   //-------------------------------------------------
   //------------ COMPONENTS
-
-  async componentDidUpdate(prevProps, prevSate) {
+  /* async componentDidUpdate(prevProps, prevSate) {
     const { search } = this.state;
 
     if (prevSate.search !== search) {
@@ -36,20 +45,18 @@ export class App extends Component {
         largeURL: '',
       }));
     }
-  }
+  } */
 
   //-------------------------------------------------
   //------------ FUNCTIONS
-  handleSearch = e => {
+  const handleSearch = e => {
     e.preventDefault();
     const value = e.target.childNodes[1].value;
-    this.setState({
-      search: value,
-      found: true,
-    });
+    setSearch(value);
+    setFound(true);
   };
 
-  handlePage = async () => {
+  const handlePage = async () => {
     const { search, page, images } = this.state;
     const newData = await fetchPixabay(search, page + 1).then();
 
@@ -59,7 +66,7 @@ export class App extends Component {
     }));
   };
 
-  handleModal = (e) => {
+  const handleModal = (e) => {
     const { images } = this.state;
     const imgID = JSON.parse(e.target.attributes[0].value);
     const image = images.find(item => item.id === imgID);
@@ -70,15 +77,15 @@ export class App extends Component {
     }));
   }
 
-  closeModal = () => {
+  const closeModal = () => {
     this.setState({modal: false});
   }
 
   //-------------------------------------------------
   //------------ RENDER
-  render() {
-    const { images, found, modal, largeURL } = this.state;
-    const { handleSearch, handlePage, handleModal, closeModal } = this;
+
+    /* const { images, found, modal, largeURL } = this.state;
+    const { handleSearch, handlePage, handleModal, closeModal } = this; */
 
     return (
       <div className={css.App}>
@@ -90,4 +97,4 @@ export class App extends Component {
       </div>
     );
   }
-}
+
