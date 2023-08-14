@@ -23,30 +23,12 @@ export const App = () => {
       setFound(false);
       setModal(false);
       setLargeURL('');
-      console.log("New data: ", newData.hits);
     }
 
     if(search !== "") FetchApi();
-    
   }, [search]);
 
-  //-------------------------------------------------
-  //------------ COMPONENTS
-  /* async componentDidUpdate(prevProps, prevSate) {
-    const { search } = this.state;
-
-    if (prevSate.search !== search) {
-      const newData = await fetchPixabay(search, 1).then();
-      this.setState(() => ({
-        images: [...newData.hits],
-        page: 1,
-        found: false,
-        modal: false,
-        largeURL: '',
-      }));
-    }
-  } */
-
+  
   //-------------------------------------------------
   //------------ FUNCTIONS
   const handleSearch = e => {
@@ -57,36 +39,23 @@ export const App = () => {
   };
 
   const handlePage = async () => {
-    const { search, page, images } = this.state;
     const newData = await fetchPixabay(search, page + 1).then();
-
-    this.setState(() => ({
-      page: page + 1,
-      images: [...images, ...newData.hits],
-    }));
+    setPage(page + 1);
+    setImages([...images, ...newData.hits]);
   };
 
   const handleModal = (e) => {
-    const { images } = this.state;
     const imgID = JSON.parse(e.target.attributes[0].value);
     const image = images.find(item => item.id === imgID);
-
-    this.setState(() => ({
-      modal: true,
-      largeURL: image.largeImageURL,
-    }));
+    setModal(true);
+    setLargeURL(image.largeImageURL);
   }
 
-  const closeModal = () => {
-    this.setState({modal: false});
-  }
+  const closeModal = () => { setModal(false) }
 
+  
   //-------------------------------------------------
-  //------------ RENDER
-
-    /* const { images, found, modal, largeURL } = this.state;
-    const { handleSearch, handlePage, handleModal, closeModal } = this; */
-
+  //------------ RETURN
     return (
       <div className={css.App}>
         <Searchbar handleSearch={handleSearch} />
@@ -97,4 +66,3 @@ export const App = () => {
       </div>
     );
   }
-
