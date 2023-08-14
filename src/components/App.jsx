@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { fetchPixabay } from '../resources/fetchPixabay';
-import ImageGallery from './ImageGallery/ImageGallery';
-import Searchbar from './Searchbar/Searchbar';
+import {ImageGallery} from './ImageGallery/ImageGallery';
+import {Searchbar} from './Searchbar/Searchbar';
 import css from './styles.module.css';
-import Button from './Button/Button';
+import {Button} from './Button/Button';
 import { Grid } from 'react-loader-spinner';
-import Modal from './Modal/Modal';
+import {Modal} from './Modal/Modal';
 
 export const App = () => {
   const [images, setImages] = useState([]);
@@ -53,7 +53,7 @@ export const App = () => {
 
   const closeModal = () => { setModal(false) }
 
-  
+
   //-------------------------------------------------
   //------------ RETURN
     return (
