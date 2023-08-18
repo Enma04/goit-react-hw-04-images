@@ -17,7 +17,7 @@ export const App = () => {
 
   useEffect( () => {
     async function FetchApi() {
-      const newData = await fetchPixabay(search, 1).then();
+      const newData = await fetchPixabay(search, 1);
       setImages([...newData.hits]);
       setPage(1);
       setFound(false);
@@ -31,17 +31,15 @@ export const App = () => {
   
   //-------------------------------------------------
   //------------ FUNCTIONS
-  const handleSearch = e => {
-    e.preventDefault();
-    const value = e.target.childNodes[1].value;
+  const handleSearch = value => {
     setSearch(value);
     setFound(true);
   };
 
   const handlePage = async () => {
-    const newData = await fetchPixabay(search, page + 1).then();
+    const newData = await fetchPixabay(search, page + 1);
     setPage(page + 1);
-    setImages([...images, ...newData.hits]);
+    setImages( preVal => [...preVal, ...newData.hits]);
   };
 
   const handleModal = (e) => {
