@@ -42,11 +42,10 @@ export const App = () => {
     setImages( preVal => [...preVal, ...newData.hits]);
   };
 
-  const handleModal = (e) => {
-    const imgID = JSON.parse(e.target.attributes[0].value);
+  const handleModal = (imgID) => {
     const image = images.find(item => item.id === imgID);
-    setModal(true);
     setLargeURL(image.largeImageURL);
+    setModal(true);
   }
 
   const closeModal = () => { setModal(false) }
